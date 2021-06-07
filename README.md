@@ -2,9 +2,9 @@
 # Decision Making Bash Script
 
 ### How to use  :
-> Run 'click.sh' file with one command line argument that must '.sh' file that have information.
-Example: ./main click.sh
-then run file on 'Terminal'.
+> Run 'run.sh' file with one command line argument that must '.sh' file that have information.
+first give permission to run the shell script `chmod +x run.sh`
+then run the script on terminal Example: `./run.sh`
 
 ### portability :
 > We have a file name credentials.json file you can edit that file in order to change credential 
@@ -18,7 +18,7 @@ information according to user  the contain information about  database,user,pass
 > Run this file and then it will fetch all data from `citydata.json` file and after that it will invoke
 mysql server. In mysql server is create two table **1. citymaster** and **2. cityId** 
 both are information will fetch from `citydata.json` & **city id**, **city name** and **fare**
-it will seed path and cost between two city and then it will view all city in cli.
+it will seed path and cost between two city and then it will view all city in CLI.
 3. main.cpp:
 > The './main' file used to create database and and tables store the information in the table by 
 any json file the json file have the information about the fare between the cities.
@@ -56,3 +56,9 @@ g++ -std=c++11 -I/usr/include/cppconn -o tdb projectpart2.cpp -ljsoncpp -L/usr/l
 3.	mysqlcpp-connector setup
 4.  g++ compiler 
 
+### Future Enhancement : 
+> Add city data & fare API.
+> Total Time taken to reach to Source to Destination.
+> GUI using QT5+.
+> Core Algorithm(Min-Path) Enhancement.
+> Remote DATABASE Implementation.
