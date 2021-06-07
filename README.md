@@ -57,8 +57,12 @@ g++ -std=c++11 -I/usr/include/cppconn -o tdb projectpart2.cpp -ljsoncpp -L/usr/l
 4.  g++ compiler 
 
 ### Future Enhancement : 
-> Add city data & fare API.
-> Total Time taken to reach to Source to Destination.
-> GUI using QT5+.
-> Core Algorithm(Min-Path) Enhancement.
-> Remote DATABASE Implementation.
+> 1. Add city data & fare API.
+
+> 2. Total Time taken to reach to Source to Destination.
+
+> 3. GUI using QT5+.
+
+> 4. Core Algorithm(Min-Path) Enhancement.
+
+> 5. Remote DATABASE Implementation.
