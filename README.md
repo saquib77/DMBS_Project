@@ -12,10 +12,10 @@ information according to user  the contain information about  database,user,pass
 
 ### Description :
 > In this project we are creating database that ketp tables:
-1. citydata.json:  
-> We are insert all city informatin in 'citydata.json'.
-2. citySeeder.cpp:
-> Run this file and then it will fetch all data from `citydata.json` file and after that it will invoke
+1. This JSON File having all city data and fare from one city to another : ``` citydata.json ```:  
+> We will insert all city information in ``` citydata.json ```.
+2. Using citySeeder we will seed all city data into database  : ``` citySeeder.cpp ```
+> Run this file and then it will fetch all data from ``` citydata.json ``` file and after that it will invoke
 mysql server. In mysql server is create two table **1. citymaster** and **2. cityId** 
 both are information will fetch from `citydata.json` & **city id**, **city name** and **fare**
 it will seed path and cost between two city and then it will view all city in CLI.
@@ -25,14 +25,14 @@ any json file the json file have the information about the fare between the citi
 after that, './app' file ask for source and destination cities that app file get the fare_list 
 table and create a graph .
 
-> Then we apply `Min-cost algorithm` on that graph in order to get the min fare between the cities.
+> Then we apply ***``` Min-cost algorithm ```*** on that graph in order to get the min fare between the cities.
 
 > Finally, the it will output the result that shows that minimum cost between the cities. 
 
 
 ### Commands :
 
-> Internaly all this command using run.sh shell scripting file and we are using terminal and simply ./run.sh command into terminal.
+> Internally all this command using run.sh shell scripting file and that we are using terminal and simply ./run.sh command into terminal.
 
 ```
 g++ -std=c++11 -I/usr/include/cppconn -o run citySeeder.cpp -ljsoncpp -L/usr/lib -lmysqlcppconn
