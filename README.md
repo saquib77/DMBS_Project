@@ -32,17 +32,17 @@ table and create a graph .
 
 ### Commands :
 
-> Internaly all this command using click.sh shell scripting file and we are using terminal and simply ./click.sh command into terminal.
+> Internaly all this command using run.sh shell scripting file and we are using terminal and simply ./run.sh command into terminal.
 
 ```
-g++ -std=c++11 -I/usr/include/cppconn -o tdb projectpart1.cpp -ljsoncpp -L/usr/lib -lmysqlcppconn
+g++ -std=c++11 -I/usr/include/cppconn -o run citySeeder.cpp -ljsoncpp -L/usr/lib -lmysqlcppconn
 **and**
-g++ -std=c++11 -I/usr/include/cppconn -o tdb projectpart2.cpp -ljsoncpp -L/usr/lib -lmysqlcppconn
+g++ -std=c++11 -I/usr/include/cppconn -o run main.cpp -ljsoncpp -L/usr/lib -lmysqlcppconn
 
 ```
 	
 > RUN COMMAND
-``` ./click.sh ```
+``` ./run.sh ```
 **Note :**
 1.	-lmysqlcppconn	`use for mysql`
 2.	-ljsoncpp	`use for json`
