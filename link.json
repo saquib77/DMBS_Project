@@ -1,0 +1,6 @@
+{
+    "url": "localhost",
+    "username": "root",
+    "password": "{YourDBPassword}",
+    "database": "DMBS"
+}

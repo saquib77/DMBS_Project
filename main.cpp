@@ -1,155 +1,195 @@
-#include<bits/stdc++.h>
-#include<fstream>
-#include<mysql_connection.h>
-#include<cppconn/resultset.h>
-#include<cppconn/driver.h>
-#include<jsoncpp/json/json.h>
-#include<cppconn/connection.h>
-#include<cppconn/statement.h>
-#include<cppconn/exception.h>
+#include <bits/stdc++.h>
+#include <jsoncpp/json/json.h>
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#define infi 1000000000
 using namespace std;
 using namespace sql;
 using namespace Json;
-#define INF 1000000000
-
-class City{
-	public:
-    int cityId;
-    vector<pair<int,int>> neighbour;
-    City(int cityId){
-        this->cityId=cityId;
-    }
-    void add_Neighbour(int cityId,int fare){
-        pair<int,int>p;
-        p.first=fare;
-        p.second=fare;
-        neighbour.push_back(p);
-    }
-};
-int minFare(vector<City*>g,int s,int d,vector<int>& path){
-	vector<int>dist(g.size());
-	bool visited[g.size()];
-	for(int i=0;i<g.size();i++){
-		visited[i]=false;
-		path[i]=-1;
-		dist[i]=INF;
+void fun(int a[][8]);
+class City
+{
+public:
+	int cityId;
+	vector<pair<int, int>> neighbour;
+	City(int cityId)
+	{
+		this->cityId = cityId;
 	}
-	dist[s]=0;
-	path[s]=-1;
-	int current =s;
-	unordered_set<int>sett;
-	while(true){
-		visited[current]=true;
-		for(int i=0;i< g[current]->neighbour.size();i++){
-			int v=g[current]->neighbour[i].first;
-			if(visited[v]) continue;
+	void add_neighbour(int cityId, int fare)
+	{
+		pair<int, int> p;
+		p.first = cityId;
+		p.second = fare;
+		neighbour.push_back(p);
+	}
+};
+int minFare(vector<City *> g, int s, int d, vector<int> &path)
+{
+	vector<int> dist(g.size());
+	bool visited[g.size()];
+	for (int i = 0; i < g.size(); i++)
+	{
+		visited[i] = false;
+		path[i] = -1;
+		dist[i] = infi;
+	}
+	dist[s] = 0;
+	path[s] = -1;
+	int current = s;
+	unordered_set<int> sett;
+	while (true)
+	{
+		visited[current] = true;
+		for (int i = 0; i < g[current]->neighbour.size(); i++)
+		{
+			int v = g[current]->neighbour[i].first;
+			if (visited[v])
+				continue;
 			sett.insert(v);
-			int alt=dist[current]+g[current]->neighbour[i].second;
-			if(alt<dist[v]){
-				dist[v]=alt;
-				path[v]=current;
+			int alt = dist[current] + g[current]->neighbour[i].second;
+			if (alt < dist[v])
+			{
+				dist[v] = alt;
+				path[v] = current;
 			}
 		}
 		sett.erase(current);
-		if(sett.empty())
+		if (sett.empty())
 			break;
-		int minDist=INF;
-		int index=0;
-		for(int a:sett){
-			if(dist[a]<minDist){
-				minDist=dist[a];
-				index=a;
+		int minDist = infi;
+		int index = 0;
+		for (int a : sett)
+		{
+			if (dist[a] < minDist)
+			{
+				minDist = dist[a];
+				index = a;
 			}
 		}
-		current=index;
+		current = index;
 	}
 	return dist[d];
 }
-
-void populate(int ar[8][8],int n){
-	for(int i=0;i<n;i++){
-                for(int j=0;j<n;j++){
-                      if(i==j&& i>=1 && j>=1) ar[i][j]=0;
-                      else ar[i][j]=-1;
-        	}
-	}
-}
-int main(int argc,char*argv[]){
-    Reader cr;
-    Value cob;
-    ifstream cifs("credential.json");
-    cr.parse(cifs,cob);
-
-    const string url = cob["url"].asString();
-    const string user = cob["username"].asString();
-    const string password = cob["password"].asString();
-    const string database = cob["database"].asString();
-    
-    try{
-        Driver& driver = *get_driver_instance();
-        Connection& con = *driver.connect(url,user,password);
-        con.setSchema(database);
-        Statement& stmt = *con.createStatement();
-        
-        ResultSet& rs = *stmt.executeQuery("select count(*) from City_Master");
-        int n;
-        if(rs.next()){
-            n=rs.getInt(1);
-        }
-    
-        ResultSet& res = *stmt.executeQuery("SELECT * FROM City_Master");
-		cout<<"City Id     City Name"<<endl;
-        while(res.next()){
-            cout<<"  "<<res.getInt(1)<<"           "<<res.getString(2)<<endl;
-        }
-    
-        int id1,id2;
-		a:
-		cout<<"Enter City Id of Source"<<"(1 to "<<n<<") :";
-		cin>>id1;
-		if(id1 > n){
-			cout<<"City Id "<<id1<<" not Found!"<<endl;
-			cout<<"WRONG CITY ID ! Enter it Again !"<<endl;
-			goto a;
+int main()
+{
+	Reader creader;
+	Value cobj;
+	ifstream cifs("link.json");
+	creader.parse(cifs, cobj);
+	const string url = cobj["url"].asString();
+	const string user = cobj["username"].asString();
+	const string pass = cobj["password"].asString();
+	const string database = cobj["database"].asString();
+	try
+	{
+		Driver &driver = *get_driver_instance();
+		Connection &con = *driver.connect(url, user, pass);
+		con.setSchema(database);
+		Statement &stmt = *con.createStatement();
+		int a[8][8];
+		fun(a);
+		ResultSet &rs = *stmt.executeQuery("select * from farelist");
+		while (rs.next())
+		{
+			stringstream g(rs.getString(3));
+			int r;
+			g >> r;
+			a[rs.getInt(1)][rs.getInt(2)] = r;
+			a[rs.getInt(2)][rs.getInt(1)] = r;
 		}
-		b:
-		cout<<"Enter City Id of Destination<<"<<"(1 to "<<n<<") :";
-		cin>>id2;
-		if(id2>n){
-			cout<<"City Id "<<id2<<" not Found!"<<endl;
-			cout<<"WRONG CITY ID ! Enter it Again !"<<endl;
-			goto b;
+		string s1, s2;
+	re:
+		cout << "\n\t\t\t\t\tEnter Source City : ";
+		cin >> s1;
+		cout << "\n\t\t\t\t\tEnter Destination City :";
+		cin >> s2;
+	g:
+		ResultSet &rs1 = *stmt.executeQuery("select * from City_Master where city_name='" + s1 + "'");
+		ResultSet &rs2 = *stmt.executeQuery("select * from City_Master where city_name='" + s2 + "'");
+		int sor = 0, des = 0;
+		while (rs1.next())
+		{
+			sor = rs1.getInt(1);
 		}
-    
-        int a,b,c,city_data[8][8];
-		populate(city_data,n+1);
-
-		vector<City*>v;
-		for(int i=0;i<n+1;i++){
-			City* a0=new City(i);
-			v.push_back(a0);
+		while (rs2.next())
+		{
+			des = rs2.getInt(1);
 		}
-    
-        ResultSet& rs1=*stmt.executeQuery("SELECT * FROM farelist");
-		while(rs1.next()){
-			a=rs1.getInt(1);
-			b=rs1.getInt(2);
-			c=rs1.getInt(3);
-			city_data[a][b]=c;
-			if(city_data[a][b]>0){
-				v[a]->add_Neighbour(b,c);
+		if (sor == 0)
+		{
+			cout << "\t\t\t\t\t" << s1 << " doesn't exist" << endl;
+			cout << "\t\t\t\t\tPlease Enter Source City Again : ";
+			cin >> s1;
+			goto g;
+		}
+		else if (des == 0)
+		{
+			cout << "\t\t\t\t\t" << s2 << " doesn't exist" << endl;
+			cout << "\t\t\t\t\tPlease Enter Destination City Again : ";
+			cin >> s2;
+			goto g;
+		}
+		vector<City *> v;
+		int n = 8;
+		for (int i = 0; i < n; i++)
+		{
+			City *a = new City(i);
+			v.push_back(a);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (a[i][j] == 0 || a[i][j] == -1)
+				{
+					continue;
+				}
+				else
+				{
+					v[i]->add_neighbour(j, a[i][j]);
+				}
 			}
 		}
-    
-        vector<int>pt(v.size());
-		int fare=minFare(v,id1,id2,pt);
-		if(fare!=INF && fare!=0){
-			cout<<"Min Fare From "<<id1<<" to "<<id2<<" is : "<<fare<<endl;
-        }else{
-			cout<<"No Path Found for "<<id1<<" to "<<id2<<endl;
-        }
-    }catch(SQLException& e){
-        cout<<"Error !"<<e.what()<<endl;
-    }
-    return 0;
+		vector<int> path(v.size());
+		int minimumfare = minFare(v, sor, des, path);
+		cout << "\n\t\t\t\t\tMinimum fare between " << s1 << " [" << sor << "]"
+			 << " to " << s2 << " [" << des << "]"
+			 << " is: $" << minimumfare << "\n\n";
+		int res = 0;
+		cout << "\n\t\t\t\t\t1.To Check Again.\n\t\t\t\t\t2.Quit.\n\t\t\t\t\tEnter :";
+		cin >> res;
+		if (res == 1)
+			goto re;
+		else if (res = 2)
+		{
+			cout << "\t\t\t\t\tThank You for Using Our Service!\n";
+			return 0;
+		}
+	}
+	catch (SQLException &e)
+	{
+		cout << "Error" << e.what() << endl;
+	}
+	return 0;
+}
+void fun(int a[8][8])
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if (i == j && i >= 1 && j >= 1)
+			{
+				a[i][j] = 0;
+			}
+			else
+			{
+				a[i][j] = -1;
+			}
+		}
+	}
 }
